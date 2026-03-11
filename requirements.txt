@@ -1,15 +1,7 @@
-# --- Framework de IA (Versiones estables para CPU) ---
-torch==2.2.1+cpu
-torchvision==0.17.1+cpu
---extra-index-url https://download.pytorch.org/whl/cpu
-
-# --- Procesamiento de Lenguaje ---
 transformers
 accelerate
 sentence-transformers
 faiss-cpu
-
-# --- Herramientas RAG ---
 langchain
 langchain-community
 pypdf
@@ -18,12 +10,8 @@ scikit-learn
 pandas
 numpy
 requests
-
-# --- Evaluación y Métricas ---
 rouge-score
 rank-bm25
 nltk
-
-# --- Entorno de ejecución ---
-ipykernel
 nbconvert
+ipykernel

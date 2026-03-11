@@ -18,18 +18,14 @@ jobs:
         python-version: '3.11'
         cache: 'pip'
 
-    - name: Install PyTorch CPU
+    - name: Instalación Limpia de Dependencias (Evita error NMS)
       run: |
-        pip install torch==2.2.1+cpu torchvision==0.17.1+cpu torchaudio==2.2.1+cpu --index-url https://download.pytorch.org/whl/cpu
-
-    - name: Install dependencies
-          run: |
-            python -m pip install --upgrade pip
-            pip uninstall -y torch torchvision torchaudio
-            pip install torch==2.2.1+cpu torchvision==0.17.1+cpu torchaudio==2.2.1+cpu --index-url https://download.pytorch.org/whl/cpu
-            grep -vE 'torch|torchvision|torchaudio|google-colab|bitsandbytes' requirements.txt > req_clean.txt
-            pip install -r req_clean.txt
-            pip install nbconvert ipykernel
+        python -m pip install --upgrade pip
+        pip uninstall -y torch torchvision torchaudio bitsandbytes
+        pip install torch==2.2.1+cpu torchvision==0.17.1+cpu --index-url https://download.pytorch.org/whl/cpu
+        grep -vE 'torch|torchvision|bitsandbytes|google-colab' requirements.txt > req_clean.txt
+        pip install -r req_clean.txt
+        pip install nbconvert ipykernel
 
     - name: Execute notebook
       env:

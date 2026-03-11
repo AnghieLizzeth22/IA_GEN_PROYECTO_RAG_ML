@@ -18,20 +18,31 @@ jobs:
         python-version: '3.11'
         cache: 'pip'
 
-    - name: Instalación Limpia de Dependencias (Evita error NMS)
+    - name: Clean and Install Dependencies
       run: |
         python -m pip install --upgrade pip
+        
+        # 1. Eliminación agresiva de librerías conflictivas pre-instaladas
         pip uninstall -y torch torchvision torchaudio bitsandbytes
-        pip install torch==2.2.1+cpu torchvision==0.17.1+cpu --index-url https://download.pytorch.org/whl/cpu
-        grep -vE 'torch|torchvision|bitsandbytes|google-colab' requirements.txt > req_clean.txt
-        pip install -r req_clean.txt
+        
+        # 2. Instalación de versión específica de CPU para evitar el error 'torchvision::nms'
+        pip install torch==2.2.1+cpu --index-url https://download.pytorch.org/whl/cpu
+        
+        # 3. Instalación del resto de dependencias desde requirements.txt
+        # Nota: Asegúrate de que tu requirements.txt NO incluya torchvision
+        if [ -f requirements.txt ]; then
+          grep -vE 'torchvision|bitsandbytes' requirements.txt > req_clean.txt
+          pip install -r req_clean.txt
+        fi
+        
+        # 4. Instalamos utilidades necesarias para ejecutar notebooks
         pip install nbconvert ipykernel
 
     - name: Execute notebook
       env:
         HF_TOKEN: ${{ secrets.HF_TOKEN }}
       run: |
-        jupyter nbconvert --to notebook --execute notebooks/Proyecto_RAG.ipynb --output ../resultado_rag.ipynb
+        jupyter nbconvert --to notebook --execute notebooks/Proyecto_RAG_paraGit.ipynb --output ../resultado_rag.ipynb
 
     - name: Upload result
       if: always()

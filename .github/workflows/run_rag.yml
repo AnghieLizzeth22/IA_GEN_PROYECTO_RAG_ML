@@ -14,41 +14,33 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.12'
-
+        python-version: '3.11'
+        cache: 'pip' # Acelera futuras ejecuciones guardando las librerías
 
     - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y \
-          build-essential \
-          cmake \
-          git \
-          libffi-dev \
-          libssl-dev \
-          libjpeg-dev \
-          libpng-dev \
-          libfreetype6-dev \
-          pkg-config \
-          ffmpeg \
-          r-base \
-          libgirepository1.0-dev \
-          libcairo2-dev \
-          libpq-dev \
-          python3-dev \
-          wget \
-          coinor-libipopt-dev \
-          gdal-bin \
-          libgdal-dev  
+        sudo apt-get install -y build-essential cmake git ffmpeg libpq-dev
 
-    - name: Install dependencies without Google Colab
+    - name: Install dependencies
       run: |
-        grep -v 'google-colab' requirements.txt > req_no_colab.txt
-        pip install -r req_no_colab.txt --extra-index-url https://download.pytorch.org/whl/cpu
-        pip install nbconvert ipykernel
+        python -m pip install --upgrade pip
+        # Instalamos usando el índice de CPU para que coincida con tu requirements.txt
+        pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cpu
 
     - name: Execute notebook
+      env:
+        # Aquí pasas tus llaves secretas al entorno del notebook
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       run: |
-        jupyter nbconvert --to notebook --execute notebooks/Proyecto_RAG.ipynb --output resultado_rag.ipynb
+        # Ejecuta el notebook y genera uno nuevo con los resultados
+        jupyter nbconvert --to notebook --execute notebooks/Proyecto_RAG.ipynb --output ../resultado_rag.ipynb
+
+    - name: Upload result
+      if: always() # Sube el resultado incluso si el notebook da error (útil para debug)
+      uses: actions/upload-artifact@v4
+      with:
+        name: notebook-resultado
+        path: resultado_rag.ipynb

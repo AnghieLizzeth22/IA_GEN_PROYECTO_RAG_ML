@@ -16,7 +16,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10'
+        python-version: '3.12'
 
 
     - name: Install system dependencies
@@ -43,8 +43,12 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        grep -v 'google-colab' requirements.txt > req_no_colab.txt
+        # eliminamos google-colab y cucim si está en requirements
+        grep -v -e 'google-colab' -e 'cucim' requirements.txt > req_no_colab.txt
         pip install -r req_no_colab.txt
+        # instalamos PyTorch compatible con Python 3.12 (CPU-only)
+        pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+
 
     - name: Install Jupyter
       run: pip install notebook nbconvert

@@ -1,11 +1,4 @@
-# --- Base y Notebooks ---
-ipykernel
-nbconvert
-numpy
-pandas
-requests
-
-# --- NLP y LLM ---
+# --- Core IA (Versiones CPU estables) ---
 torch==2.2.1+cpu
 torchvision==0.17.1+cpu
 torchaudio==2.2.1+cpu
@@ -14,14 +7,19 @@ accelerate
 sentence-transformers
 faiss-cpu
 
-# --- RAG e Infraestructura ---
+# --- RAG y Procesamiento ---
 langchain
 langchain-community
 pypdf
 beautifulsoup4
 scikit-learn
+pandas
+numpy
+requests
 
-# --- Métricas de Maestría ---
+# --- Métricas y Notebooks ---
 rouge-score
 rank-bm25
 nltk
+ipykernel
+nbconvert

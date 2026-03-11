@@ -38,7 +38,8 @@ jobs:
           libcairo2-dev \
           libpq-dev \
           python3-dev \
-          wget   
+          wget \
+          coinor-libipopt-dev  
 
     - name: Install dependencies
       run: |

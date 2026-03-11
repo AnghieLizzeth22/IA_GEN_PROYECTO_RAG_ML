@@ -1,4 +1,11 @@
-# --- IA y Modelos ---
+# --- Base y Notebooks ---
+ipykernel
+nbconvert
+numpy
+pandas
+requests
+
+# --- NLP y LLM ---
 torch==2.2.1+cpu
 torchvision==0.17.1+cpu
 torchaudio==2.2.1+cpu
@@ -7,20 +14,14 @@ accelerate
 sentence-transformers
 faiss-cpu
 
-# --- RAG y LangChain ---
+# --- RAG e Infraestructura ---
 langchain
 langchain-community
 pypdf
 beautifulsoup4
-requests
+scikit-learn
 
-# --- Métricas y Procesamiento Científico ---
+# --- Métricas de Maestría ---
 rouge-score
 rank-bm25
 nltk
-scikit-learn
-numpy
-
-# --- Entorno de Ejecución ---
-ipykernel
-nbconvert

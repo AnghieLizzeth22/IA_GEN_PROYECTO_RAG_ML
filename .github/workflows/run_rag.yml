@@ -2,47 +2,38 @@ name: Run RAG Notebook
 
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:  # esto permite ejecutar manualmente desde GitHub
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   run-notebook:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-
-    - name: Set up Python
-      uses: actions/setup-python@v5
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: '3.11'
-        cache: 'pip' # Acelera futuras ejecuciones guardando las librerías
 
-    - name: Install system dependencies
+    - name: Install PyTorch CPU
       run: |
-        sudo apt-get update
-        sudo apt-get install -y build-essential cmake git ffmpeg libpq-dev
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
         pip install torch==2.2.1+cpu torchvision==0.17.1+cpu torchaudio==2.2.1+cpu --index-url https://download.pytorch.org/whl/cpu
-        grep -vE 'torch|torchvision|torchaudio' requirements.txt > req_no_torch.txt
-        pip install -r req_no_torch.txt
+
+    - name: Install Dependencies
+      run: |
+        # Evitamos instalar bitsandbytes en GitHub porque da error en CPU
+        grep -vE 'bitsandbytes|torch|torchvision|torchaudio|google-colab' requirements.txt > req_clean.txt
+        pip install -r req_clean.txt
         pip install nbconvert ipykernel
 
     - name: Execute notebook
       env:
-        # Aquí pasas tus llaves secretas al entorno del notebook
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        HF_TOKEN: ${{ secrets.HF_TOKEN }} # Crea este secreto en GitHub Settings
       run: |
-        # Ejecuta el notebook y genera uno nuevo con los resultados
         jupyter nbconvert --to notebook --execute notebooks/Proyecto_RAG.ipynb --output ../resultado_rag.ipynb
 
     - name: Upload result
-      if: always() # Sube el resultado incluso si el notebook da error (útil para debug)
+      if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: notebook-resultado
+        name: notebook-final
         path: resultado_rag.ipynb

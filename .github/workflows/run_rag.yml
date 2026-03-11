@@ -29,8 +29,9 @@ jobs:
         libgdal-dev \
         libcairo2-dev \
         libgirepository1.0-dev \
-        gir1.2-gtk-3.0
-
+        gir1.2-gtk-3.0 \
+        r-base    
+        
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip

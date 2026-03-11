@@ -28,7 +28,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        grep -v 'google-colab' requirements.txt > req_no_colab.txt
+        pip install -r req_no_colab.txt
 
     - name: Install Jupyter
       run: pip install notebook nbconvert

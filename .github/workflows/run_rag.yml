@@ -39,7 +39,9 @@ jobs:
           libpq-dev \
           python3-dev \
           wget \
-          coinor-libipopt-dev  
+          coinor-libipopt-dev \
+          gdal-bin \
+          libgdal-dev  
 
     - name: Install dependencies
       run: |

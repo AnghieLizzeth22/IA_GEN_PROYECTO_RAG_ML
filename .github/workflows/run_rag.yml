@@ -16,28 +16,15 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
-        cache: 'pip'
 
-    - name: Clean and Install Dependencies
+    - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        
-        # 1. ELIMINACIÓN AGRESIVA: Quitamos todo lo que GitHub trae por defecto
-        # Esto mata el error de 'torchvision::nms does not exist' de raíz.
+        # Limpiamos instalaciones previas de GitHub
         pip uninstall -y torch torchvision torchaudio bitsandbytes
-        
-        # 2. INSTALACIÓN LIMPIA: Solo Torch CPU y dependencias de texto
-        # No instalamos torchvision porque tu RAG es 100% texto.
-        pip install torch==2.2.1+cpu --index-url https://download.pytorch.org/whl/cpu
-        
-        # 3. INSTALACIÓN DESDE REQUIREMENTS
-        # Asegúrate de que en tu requirements.txt NO esté la palabra torchvision.
-        if [ -f requirements.txt ]; then
-          grep -vE 'torchvision|bitsandbytes' requirements.txt > req_clean.txt
-          pip install -r req_clean.txt
-        fi
-        
-        # 4. UTILIDADES DE EJECUCIÓN
+        # Instalamos todo desde el requirements controlado
+        pip install -r requirements.txt
+        # Instalamos herramientas de ejecución
         pip install nbconvert ipykernel
 
     - name: Execute notebook

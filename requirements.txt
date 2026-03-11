@@ -1,8 +1,11 @@
-torch==2.2.1+cpu
+# Motores base (Versiones sincronizadas)
+torch==2.1.2+cpu
 --extra-index-url https://download.pytorch.org/whl/cpu
-transformers
-accelerate
-sentence-transformers
+
+# NLP y RAG (Versiones estables)
+transformers==4.38.0
+accelerate==0.27.0
+sentence-transformers==2.5.1
 faiss-cpu
 langchain
 langchain-community

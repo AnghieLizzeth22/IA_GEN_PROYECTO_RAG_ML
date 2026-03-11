@@ -20,11 +20,15 @@ jobs:
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        # Limpiamos instalaciones previas de GitHub
-        pip uninstall -y torch torchvision torchaudio bitsandbytes
-        # Instalamos todo desde el requirements controlado
+        # Limpieza total
+        pip uninstall -y torch torchvision torchaudio bitsandbytes numpy
+        
+        # Instalación en orden jerárquico
+        pip install numpy==1.26.4
+        pip install torch==2.1.2+cpu --index-url https://download.pytorch.org/whl/cpu
+        
+        # El resto de librerías
         pip install -r requirements.txt
-        # Instalamos herramientas de ejecución
         pip install nbconvert ipykernel
 
     - name: Execute notebook

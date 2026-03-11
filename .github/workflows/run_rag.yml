@@ -47,8 +47,9 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         grep -v 'google-colab' requirements.txt > req_no_colab.txt
-        # Reemplazar torchaudio==2.10.0+cu128 por la versión CPU compatible
+        # Reemplaza GPU por CPU solo para esta ejecución
         sed -i 's/torchaudio==2.10.0+cu128/torchaudio==2.10.0/' req_no_colab.txt
+        sed -i 's/torchcodec==0.10.0+cu128/torchcodec==0.10.0/' req_no_colab.txt
         pip install -r req_no_colab.txt
 
     - name: Install PyTorch (CPU version)

@@ -9,25 +9,33 @@ jobs:
   run-notebook:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
+        cache: 'pip'
 
     - name: Install PyTorch CPU
       run: |
         pip install torch==2.2.1+cpu torchvision==0.17.1+cpu torchaudio==2.2.1+cpu --index-url https://download.pytorch.org/whl/cpu
 
-    - name: Install Dependencies
+    - name: Install dependencies
       run: |
-        # Evitamos instalar bitsandbytes en GitHub porque da error en CPU
-        grep -vE 'bitsandbytes|torch|torchvision|torchaudio|google-colab' requirements.txt > req_clean.txt
+        python -m pip install --upgrade pip
+        pip uninstall -y torch torchvision torchaudio
+        pip install torch==2.2.1+cpu torchvision==0.17.1+cpu torchaudio==2.2.1+cpu --index-url https://download.pytorch.org/whl/cpu
+        grep -vE 'torch|torchvision|torchaudio|google-colab' requirements.txt > req_clean.txt
         pip install -r req_clean.txt
+        
+        # 4. Aseguramos utilidades de notebook
         pip install nbconvert ipykernel
 
     - name: Execute notebook
       env:
-        HF_TOKEN: ${{ secrets.HF_TOKEN }} # Crea este secreto en GitHub Settings
+        HF_TOKEN: ${{ secrets.HF_TOKEN }}
       run: |
         jupyter nbconvert --to notebook --execute notebooks/Proyecto_RAG.ipynb --output ../resultado_rag.ipynb
 

@@ -1,13 +1,7 @@
-# --- Core IA (Versiones CPU estables) ---
-torch==2.2.1+cpu
-torchvision==0.17.1+cpu
-torchaudio==2.2.1+cpu
 transformers
 accelerate
 sentence-transformers
 faiss-cpu
-
-# --- RAG y Procesamiento ---
 langchain
 langchain-community
 pypdf
@@ -16,10 +10,6 @@ scikit-learn
 pandas
 numpy
 requests
-
-# --- Métricas y Notebooks ---
 rouge-score
 rank-bm25
 nltk
-ipykernel
-nbconvert

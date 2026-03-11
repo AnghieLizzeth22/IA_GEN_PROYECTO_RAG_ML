@@ -81,7 +81,7 @@ cuda-core==0.3.2
 cuda-pathfinder==1.4.0
 cuda-python==12.9.4
 cuda-toolkit==12.8.1
-cudf-cu12==26.2.c
+cudf-cu12==26.2.0
 cudf-polars-cu12==26.2.1
 cufflinks==0.17.3
 cuml-cu12==26.2.0

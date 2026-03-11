@@ -16,22 +16,30 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.12'
+        python-version: '3.10'
 
 
     - name: Install system dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y \
-        pkg-config \
-        coinor-libipopt-dev \
-        gdal-bin \
-        libgdal-dev \
-        libcairo2-dev \
-        libgirepository1.0-dev \
-        gir1.2-gtk-3.0 \
-        r-base    
-        
+          build-essential \
+          cmake \
+          git \
+          libffi-dev \
+          libssl-dev \
+          libjpeg-dev \
+          libpng-dev \
+          libfreetype6-dev \
+          pkg-config \
+          ffmpeg \
+          r-base \
+          libgirepository1.0-dev \
+          libcairo2-dev \
+          libpq-dev \
+          python3-dev \
+          wget   
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip

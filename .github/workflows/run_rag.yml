@@ -22,20 +22,22 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         
-        # 1. Eliminación agresiva de librerías conflictivas pre-instaladas
+        # 1. ELIMINACIÓN AGRESIVA: Quitamos todo lo que GitHub trae por defecto
+        # Esto mata el error de 'torchvision::nms does not exist' de raíz.
         pip uninstall -y torch torchvision torchaudio bitsandbytes
         
-        # 2. Instalación de versión específica de CPU para evitar el error 'torchvision::nms'
+        # 2. INSTALACIÓN LIMPIA: Solo Torch CPU y dependencias de texto
+        # No instalamos torchvision porque tu RAG es 100% texto.
         pip install torch==2.2.1+cpu --index-url https://download.pytorch.org/whl/cpu
         
-        # 3. Instalación del resto de dependencias desde requirements.txt
-        # Nota: Asegúrate de que tu requirements.txt NO incluya torchvision
+        # 3. INSTALACIÓN DESDE REQUIREMENTS
+        # Asegúrate de que en tu requirements.txt NO esté la palabra torchvision.
         if [ -f requirements.txt ]; then
           grep -vE 'torchvision|bitsandbytes' requirements.txt > req_clean.txt
           pip install -r req_clean.txt
         fi
         
-        # 4. Instalamos utilidades necesarias para ejecutar notebooks
+        # 4. UTILIDADES DE EJECUCIÓN
         pip install nbconvert ipykernel
 
     - name: Execute notebook

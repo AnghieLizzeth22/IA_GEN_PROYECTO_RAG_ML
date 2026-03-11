@@ -16,7 +16,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10'
+        python-version: '3.12'
 
 
     - name: Install system dependencies
@@ -43,23 +43,16 @@ jobs:
           gdal-bin \
           libgdal-dev  
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        grep -v 'google-colab' requirements.txt > req_no_colab.txt
-        # Reemplaza versiones GPU por CPU
-        sed -i 's/torchvision==0.25.0+cu128/torchvision==0.25.0/' req_no_colab.txt
-        sed -i 's/torchaudio==2.10.0+cu128/torchaudio==2.10.0/' req_no_colab.txt
-        sed -i 's/torchcodec==0.10.0+cu128/torchcodec==0.10.0/' req_no_colab.txt
-        pip install -r req_no_colab.txt
-
     - name: Install PyTorch (CPU version)
       run: |
-        pip install torch==2.0.1+cpu torchaudio==2.10.0+cpu --index-url https://download.pytorch.org/whl/cpu
+        pip install --upgrade pip
+        pip install torch==2.1.0+cpu torchvision==0.16.0+cpu torchaudio==2.1.0+cpu --index-url https://download.pytorch.org/whl/cpu
 
-    - name: Install Jupyter
-      run: pip install notebook nbconvert
-
+    - name: Install dependencies without Google Colab
+      run: |
+        grep -v 'google-colab' requirements.txt > req_no_colab.txt
+        pip install -r req_no_colab.txt
+                
     - name: Execute notebook
       run: |
         jupyter nbconvert --to notebook --execute notebooks/Proyecto_RAG.ipynb --output resultado_rag.ipynb

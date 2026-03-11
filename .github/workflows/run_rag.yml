@@ -43,14 +43,11 @@ jobs:
           gdal-bin \
           libgdal-dev  
 
-    - name: Install PyTorch (CPU version)
-      run: |
-        pip install torch==2.2.2+cpu torchvision==0.17.1+cpu torchaudio==2.2.2+cpu --index-url https://download.pytorch.org/whl/cpu
-        
     - name: Install dependencies without Google Colab
       run: |
         grep -v 'google-colab' requirements.txt > req_no_colab.txt
-        pip install -r req_no_colab.txt
+        pip install -r req_no_colab.txt --extra-index-url https://download.pytorch.org/whl/cpu
+        pip install nbconvert ipykernel
 
     - name: Execute notebook
       run: |
